@@ -10,10 +10,18 @@ const client = new Client({
 const logger = client.logger;
 
 client.once(Events.Client.Ready, (client) => {
-  logger.info(`${client.self?.user.username} is now online!`);
+  logger.info(`${client?.user.username} is now online!`);
 });
 
-client.on(Events.Client.MessageCreate, (message) => {
+client.on(Events.Channel.Create, (channel) => {
+  logger.info(`Channel ${channel.name} has been created!`);
+});
+
+client.on(Events.Channel.Delete, (channel) => {
+  logger.info(`Channel ${channel.name} has been deleted!`);
+});
+
+client.on(Events.Message.Create, (message) => {
   logger.raw({ message });
 });
 

@@ -1,33 +1,291 @@
-import EventEmitter from "$/EventEmitter";
-import Client from "$/Client";
-import { GatewayEvents } from "#/Socket";
+import { GatewayEvents, GatewayPayload } from "#/Socket";
+import { Types } from "#/APITypes";
 
 export const ClientEventMap: {
   [key in GatewayEvents]: keyof ClientEvents;
 } = {
+  HELLO: "client:hello",
   READY: "client:ready",
+  RESUMED: "gateway:resumed",
+  RECONNECT: "gateway:reconnect",
+  INVALID_SESSION: "gateway:invalidSession",
+  APPLICATION_COMMAND_PERMISSIONS_UPDATE:
+    "applicationCommand:permissionsUpdate",
+  AUTO_MODERATION_RULE_CREATE: "automod:RuleCreate",
+  AUTO_MODERATION_RULE_UPDATE: "automod:RuleUpdate",
+  AUTO_MODERATION_RULE_DELETE: "automod:RuleDelete",
+  AUTO_MODERATION_ACTION_EXECUTION: "automod:actionExecution",
+  CHANNEL_CREATE: "channel:create",
+  CHANNEL_UPDATE: "channel:update",
+  CHANNEL_DELETE: "channel:delete",
+  CHANNEL_PINS_UPDATE: "channel:pinsUpdate",
+  THREAD_CREATE: "thread:create",
+  THREAD_UPDATE: "thread:update",
+  THREAD_DELETE: "thread:delete",
+  THREAD_LIST_SYNC: "thread:listSync",
+  THREAD_MEMBER_UPDATE: "thread:memberUpdate",
+  THREAD_MEMBERS_UPDATE: "thread:membersUpdate",
+  ENTITLEMENT_CREATE: "entitlement:create",
+  ENTITLEMENT_UPDATE: "entitlement:update",
+  ENTITLEMENT_DELETE: "entitlement:delete",
   GUILD_CREATE: "guild:create",
+  GUILD_UPDATE: "guild:update",
+  GUILD_DELETE: "guild:delete",
+  GUILD_AUDIT_LOG_ENTRY_CREATE: "guild:auditLogEntryCreate",
+  GUILD_BAN_ADD: "guild:banAdd",
+  GUILD_BAN_REMOVE: "guild:banRemove",
+  GUILD_EMOJIS_UPDATE: "guild:emojisUpdate",
+  GUILD_STICKERS_UPDATE: "guild:stickersUpdate",
+  GUILD_INTEGRATIONS_UPDATE: "guild:integrationsUpdate",
+  GUILD_MEMBER_ADD: "guild:memberAdd",
+  GUILD_MEMBER_REMOVE: "guild:memberRemove",
+  GUILD_MEMBER_UPDATE: "guild:memberUpdate",
+  GUILD_MEMBERS_CHUNK: "guild:membersChunk",
+  GUILD_ROLE_CREATE: "guild:roleCreate",
+  GUILD_ROLE_UPDATE: "guild:roleUpdate",
+  GUILD_ROLE_DELETE: "guild:roleDelete",
+  GUILD_SCHEDULED_EVENT_CREATE: "guild:scheduledEventCreate",
+  GUILD_SCHEDULED_EVENT_UPDATE: "guild:scheduledEventUpdate",
+  GUILD_SCHEDULED_EVENT_DELETE: "guild:scheduledEventDelete",
+  GUILD_SCHEDULED_EVENT_USER_ADD: "guild:scheduledEventUserAdd",
+  GUILD_SCHEDULED_EVENT_USER_REMOVE: "guild:scheduledEventUserRemove",
+  GUILD_SOUNDBOARD_SOUND_CREATE: "guild:soundboardSoundCreate",
+  GUILD_SOUNDBOARD_SOUND_UPDATE: "guild:soundboardSoundUpdate",
+  GUILD_SOUNDBOARD_SOUND_DELETE: "guild:soundboardSoundDelete",
+  GUILD_SOUNDBOARD_SOUNDS_UPDATE: "guild:soundboardSoundsUpdate",
+  SOUNDBOARD_SOUNDS: "soundboard:sounds",
+  INTEGRATION_CREATE: "integration:create",
+  INTEGRATION_UPDATE: "integration:update",
+  INTEGRATION_DELETE: "integration:delete",
+  INTERACTION_CREATE: "interaction:create",
+  INVITE_CREATE: "invite:create",
+  INVITE_DELETE: "invite:delete",
   MESSAGE_CREATE: "message:create",
+  MESSAGE_UPDATE: "message:update",
+  MESSAGE_DELETE: "message:delete",
+  MESSAGE_DELETE_BULK: "message:deleteBulk",
+  MESSAGE_REACTION_ADD: "message:reactionAdd",
+  MESSAGE_REACTION_REMOVE: "message:reactionRemove",
+  MESSAGE_REACTION_REMOVE_ALL: "message:reactionRemoveAll",
+  MESSAGE_REACTION_REMOVE_EMOJI: "message:reactionRemoveEmoji",
+  PRESENCE_UPDATE: "presence:update",
+  STAGE_INSTANCE_CREATE: "stageInstance:create",
+  STAGE_INSTANCE_UPDATE: "stageInstance:update",
+  STAGE_INSTANCE_DELETE: "stageInstance:delete",
+  SUBSCRIPTION_CREATE: "subscription:create",
+  SUBSCRIPTION_UPDATE: "subscription:update",
+  SUBSCRIPTION_DELETE: "subscription:delete",
+  TYPING_START: "typing:start",
+  USER_UPDATE: "user:update",
+  VOICE_CHANNEL_EFFECT_SEND: "voiceChannel:effectSend",
+  VOICE_STATE_UPDATE: "voiceState:update",
+  VOICE_SERVER_UPDATE: "voiceServer:update",
+  WEBHOOKS_UPDATE: "webhooks:update",
+  MESSAGE_POLL_VOTE_ADD: "message:pollVoteAdd",
+  MESSAGE_POLL_VOTE_REMOVE: "message:pollVoteRemove",
 };
+
 export type ClientEvents = {
-  "client:ready": Client;
-  "guild:create": DiscordGuild;
-  "message:create": Message;
+  "client:hello": GatewayPayload;
+  "client:ready": Types.Client | undefined;
+  "gateway:resumed": unknown;
+  "gateway:reconnect": unknown;
+  "gateway:invalidSession": unknown;
+  "applicationCommand:permissionsUpdate": unknown;
+  "automod:RuleCreate": unknown;
+  "automod:RuleUpdate": unknown;
+  "automod:RuleDelete": unknown;
+  "automod:actionExecution": unknown;
+  "channel:create": Types.Channel;
+  "channel:update": Types.Channel;
+  "channel:delete": Types.Channel;
+  "channel:pinsUpdate": unknown;
+  "thread:create": unknown;
+  "thread:update": unknown;
+  "thread:delete": unknown;
+  "thread:listSync": unknown;
+  "thread:memberUpdate": unknown;
+  "thread:membersUpdate": unknown;
+  "entitlement:create": unknown;
+  "entitlement:update": unknown;
+  "entitlement:delete": unknown;
+  "guild:create": Types.Guild;
+  "guild:update": Types.Guild;
+  "guild:delete": Types.Guild;
+  "guild:auditLogEntryCreate": unknown;
+  "guild:banAdd": unknown;
+  "guild:banRemove": unknown;
+  "guild:emojisUpdate": unknown;
+  "guild:stickersUpdate": unknown;
+  "guild:integrationsUpdate": unknown;
+  "guild:memberAdd": Types.GuildMember;
+  "guild:memberRemove": Types.GuildMember;
+  "guild:memberUpdate": Types.GuildMember;
+  "guild:membersChunk": unknown;
+  "guild:roleCreate": unknown;
+  "guild:roleUpdate": unknown;
+  "guild:roleDelete": unknown;
+  "guild:scheduledEventCreate": unknown;
+  "guild:scheduledEventUpdate": unknown;
+  "guild:scheduledEventDelete": unknown;
+  "guild:scheduledEventUserAdd": unknown;
+  "guild:scheduledEventUserRemove": unknown;
+  "guild:soundboardSoundCreate": unknown;
+  "guild:soundboardSoundUpdate": unknown;
+  "guild:soundboardSoundDelete": unknown;
+  "guild:soundboardSoundsUpdate": unknown;
+  "soundboard:sounds": unknown;
+  "integration:create": unknown;
+  "integration:update": unknown;
+  "integration:delete": unknown;
+  "interaction:create": unknown;
+  "invite:create": unknown;
+  "invite:delete": unknown;
+  "message:create": Types.Message;
+  "message:update": Types.Message;
+  "message:delete": Types.Message;
+  "message:deleteBulk": Array<Types.Message>;
+  "message:reactionAdd": unknown;
+  "message:reactionRemove": unknown;
+  "message:reactionRemoveAll": unknown;
+  "message:reactionRemoveEmoji": unknown;
+  "presence:update": unknown;
+  "stageInstance:create": unknown;
+  "stageInstance:update": unknown;
+  "stageInstance:delete": unknown;
+  "subscription:create": unknown;
+  "subscription:update": unknown;
+  "subscription:delete": unknown;
+  "typing:start": unknown;
+  "user:update": Types.APIUser;
+  "voiceChannel:effectSend": unknown;
+  "voiceState:update": unknown;
+  "voiceServer:update": unknown;
+  "webhooks:update": unknown;
+  "message:pollVoteAdd": unknown;
+  "message:pollVoteRemove": unknown;
 };
 export namespace Events {
+  export enum Application {
+    PermissionsUpdate = "applicationCommand:permissionsUpdate",
+  }
+
+  export enum AutoModeration {
+    RuleCreate = "automod:RuleCreate",
+    RuleUpdate = "automod:RuleUpdate",
+    RuleDelete = "automod:RuleDelete",
+    ActionExecution = "automod:actionExecution",
+  }
+
+  export enum Channel {
+    Create = "channel:create",
+    Update = "channel:update",
+    Delete = "channel:delete",
+    PinsUpdate = "channel:pinsUpdate",
+    ThreadCreate = "thread:create",
+    ThreadUpdate = "thread:update",
+    ThreadDelete = "thread:delete",
+    ThreadListSync = "thread:listSync",
+    ThreadMemberUpdate = "thread:memberUpdate",
+    ThreadMembersUpdate = "thread:membersUpdate",
+  }
+
+  export enum Entitlement {
+    Create = "entitlement:create",
+    Update = "entitlement:update",
+    Delete = "entitlement:delete",
+  }
+
+  export enum Guild {
+    Create = "guild:create",
+    Update = "guild:update",
+    Delete = "guild:delete",
+    AuditLogEntryCreate = "guild:auditLogEntryCreate",
+    BanAdd = "guild:banAdd",
+    BanRemove = "guild:banRemove",
+    EmojisUpdate = "guild:emojisUpdate",
+    StickersUpdate = "guild:stickersUpdate",
+    IntegrationsUpdate = "guild:integrationsUpdate",
+    MemberAdd = "guild:memberAdd",
+    MemberRemove = "guild:memberRemove",
+    MemberUpdate = "guild:memberUpdate",
+    MembersChunk = "guild:membersChunk",
+    RoleCreate = "guild:roleCreate",
+    RoleUpdate = "guild:roleUpdate",
+    RoleDelete = "guild:roleDelete",
+    ScheduledEventCreate = "guild:scheduledEventCreate",
+    ScheduledEventUpdate = "guild:scheduledEventUpdate",
+    ScheduledEventDelete = "guild:scheduledEventDelete",
+    ScheduledEventUserAdd = "guild:scheduledEventUserAdd",
+    ScheduledEventUserRemove = "guild:scheduledEventUserRemove",
+    SoundboardSoundCreate = "guild:soundboardSoundCreate",
+    SoundboardSoundUpdate = "guild:soundboardSoundUpdate",
+    SoundboardSoundDelete = "guild:soundboardSoundDelete",
+    SoundboardSoundsUpdate = "guild:soundboardSoundsUpdate",
+  }
+
+  export enum Integration {
+    Create = "integration:create",
+    Update = "integration:update",
+    Delete = "integration:delete",
+  }
+
+  export enum Interaction {
+    Create = "interaction:create",
+  }
+
+  export enum Invite {
+    Create = "invite:create",
+    Delete = "invite:delete",
+  }
+
+  export enum Message {
+    Create = "message:create",
+    Update = "message:update",
+    Delete = "message:delete",
+    DeleteBulk = "message:deleteBulk",
+    ReactionAdd = "message:reactionAdd",
+    ReactionRemove = "message:reactionRemove",
+    ReactionRemoveAll = "message:reactionRemoveAll",
+    ReactionRemoveEmoji = "message:reactionRemoveEmoji",
+    PollVoteAdd = "message:pollVoteAdd",
+    PollVoteRemove = "message:pollVoteRemove",
+  }
+
+  export enum Stage {
+    Create = "stageInstance:create",
+    Update = "stageInstance:update",
+    Delete = "stageInstance:delete",
+  }
+
+  export enum Subscription {
+    Create = "subscription:create",
+    Update = "subscription:update",
+    Delete = "subscription:delete",
+  }
+
+  export enum Voice {
+    ChannelEffectSend = "voiceChannel:effectSend",
+    StateUpdate = "voiceState:update",
+    ServerUpdate = "voiceServer:update",
+  }
+
+  export enum Webhooks {
+    Update = "webhooks:update",
+  }
+
   export enum Client {
+    Hello = "client:hello",
     Ready = "client:ready",
-    GuildCreate = "guild:create",
-    MessageCreate = "message:create",
+    Resumed = "gateway:resumed",
+    Reconnect = "gateway:reconnect",
+    InvalidSession = "gateway:invalidSession",
+    SoundboardSounds = "soundboard:sounds",
+    PresenceUpdate = "presence:update",
+    TypingStart = "typing:start",
+    UserUpdate = "user:update",
   }
 }
-
-export type GeoLocations =
-  | "us-south"
-  | "atlanta"
-  | "us-central"
-  | "us-west"
-  | "us-east";
 
 export const Intents = {
   Guilds: 1n << 0n,
@@ -53,146 +311,7 @@ export const Intents = {
   DirectMessagePolls: 1n << 25n,
 };
 
-export type DiscordAPIUser = {
-  verified: boolean;
-  username: string;
-  mfa_enabled: boolean;
-  id: string;
-  global_name: string;
-  flags: BigInt;
-  email: string;
-  discriminator: string;
-  clan: string;
-  bot: boolean;
-  avatar: null;
-};
-
-export type DiscordClient = {
-  v: number;
-  user_settings: {};
-  user: DiscordAPIUser;
-  session_type: string;
-  session_id: string;
-  resume_gateway_url: string;
-  relationships: unknown[];
-  private_channels: unknown[];
-  presences: unknown[];
-  guilds: DiscordGuild[];
-  guild_join_requests: unknown[];
-  geo_ordered_rtc_regions: GeoLocations[];
-  auth: {};
-  application: {
-    id: string;
-    flags: BigInt;
-  };
-};
-
-export type DiscordGuild = {
-  members: DiscordAPIUser[] | undefined;
-  default_message_notifications: number | undefined;
-  nsfw_level: number | undefined;
-  features: string[] | undefined; // TODO: Define the structure for features
-  inventory_settings: unknown | undefined;
-  rules_channel_id: string | undefined;
-  safety_alerts_channel_id: string | undefined;
-  verification_level: number | undefined;
-  application_command_counts: unknown[] | undefined; // TODO: Define the structure for application_command_counts
-  soundboard_sounds: unknown[] | undefined; // TODO: Define the structure for soundboard_sounds
-  id: string | undefined;
-  stickers: unknown[] | undefined; // TODO: Define the structure for stickers
-  afk_timeout: number | undefined;
-  joined_at: Date | undefined;
-  channels: unknown[] | undefined; // TODO: Define the structure for channels
-  voice_states: unknown[] | undefined; // TODO: Define the structure for voice_states
-  activity_instances: unknown[] | undefined; // TODO: Define the structure for activity_instances
-  name: string | undefined;
-  public_updates_channel_id: string | undefined;
-  region: string | undefined;
-  splash: string | undefined;
-  max_members: number | undefined;
-  owner_id: string | undefined;
-  system_channel_flags: number | undefined;
-  threads: unknown[] | undefined; // TODO: Define the structure for threads
-  premium_tier: number | undefined;
-  system_channel_id: string | undefined;
-  guild_scheduled_events: unknown[] | undefined; // TODO: Define the structure for guild_scheduled_events
-  large: boolean | undefined;
-  preferred_locale: string | undefined; // TODO: Define locales
-  description: string | undefined;
-  stage_instances: unknown[] | undefined; // TODO: Define the structure for stage_instances
-  icon: string | undefined;
-  premium_subscription_count: number | undefined;
-  lazy: boolean | undefined;
-  max_stage_video_channel_users: number | undefined;
-  explicit_content_filter: number | undefined;
-  banner: string | undefined;
-  home_header: string | undefined;
-  unavailable: boolean | undefined;
-  mfa_level: number | undefined;
-  emojis: unknown[] | undefined; // TODO: Define the structure for emojis
-  clan: string | undefined;
-  incidents_data: null | undefined;
-  application_id: string | undefined;
-  premium_progress_bar_enabled: boolean | undefined;
-  hub_type: null | undefined;
-  presences: unknown[] | undefined; // TODO: Define the structure for presences
-  nsfw: boolean | undefined;
-  discovery_splash: string | undefined;
-  member_count: number | undefined;
-  version: number | undefined;
-  afk_channel_id: string | undefined;
-  embedded_activities: unknown[] | undefined; // TODO: Define the structure for embedded_activities
-  latest_onboarding_question_id: string | undefined;
-  roles: unknown[] | undefined; // TODO: Define the structure for roles
-  max_video_channel_users: number | undefined;
-  vanity_url_code: string | undefined;
-};
-
 export interface ClientSetup {
   intents: Array<keyof typeof Intents>;
   debug?: boolean;
-}
-
-export interface GuildMember {
-  roles: Array<string>; // TODO: Define the structure for roles
-  premium_since: Date;
-  pending: boolean;
-  nick: string;
-  mute: boolean;
-  joined_at: Date;
-  flags: BigInt;
-  deaf: boolean;
-  communication_disabled_until: Date;
-  banner: null;
-  avatar: null;
-}
-
-export type Mention = Pick<
-  DiscordAPIUser,
-  "username" | "global_name" | "id" | "discriminator" | "clan" | "avatar"
-> & {
-  public_flags: BigInt;
-  avatar_decoration_data: unknown;
-};
-
-export interface Message {
-  type: number;
-  tts: boolean;
-  timestamp: Date;
-  pinned: boolean;
-  nonce: string;
-  mentions: Array<Mention>;
-  mention_roles: unknown[]; // TODO: Define the structure for roles
-  mention_everyone: boolean;
-  member: GuildMember;
-  id: string;
-  flags: BigInt;
-  embeds: unknown[];
-  edited_timestamp: Date;
-  content: string;
-  components: unknown[];
-  channel_id: string;
-  author: DiscordAPIUser;
-  attachments: unknown[];
-  guild_id: string;
 }

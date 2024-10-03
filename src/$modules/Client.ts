@@ -3,16 +3,16 @@ import {
   ClientEventMap,
   ClientEvents,
   ClientSetup,
-  DiscordClient,
   Events,
   Intents,
 } from "#/Client";
 import ws from "ws";
 import { GatewayEvents, GatewayPayload, OpCode } from "#/Socket";
 import Logger from "$/Logger";
+import { Types } from "#/APITypes";
 
 export default class Client extends EventEmitter<ClientEvents> {
-  public self?: DiscordClient;
+  public self?: Types.Client;
   public logger: Logger;
 
   private _settings: ClientSetup;
@@ -76,6 +76,7 @@ export default class Client extends EventEmitter<ClientEvents> {
       if (payload.op == OpCode.Heartbeat)
         this.ws?.send(JSON.stringify({ op: OpCode.Heartbeat, d: null }));
       if (payload.op === OpCode.Hello) {
+        this.emit(Events.Client.Hello, payload);
         this.sendHeartbeat();
         setInterval(() => {
           this.sendHeartbeat();
@@ -91,7 +92,7 @@ export default class Client extends EventEmitter<ClientEvents> {
         this.sessionType = this.self?.session_type;
         this.sessionId = this.self?.session_id;
 
-        this.emit(Events.Client.Ready, this);
+        this.emit(Events.Client.Ready, this.self);
       } else {
         const event = ClientEventMap[payload.t as GatewayEvents];
 
@@ -108,6 +109,16 @@ export default class Client extends EventEmitter<ClientEvents> {
 
     this.ws?.close();
     this.ws = new ws.WebSocket(this.resumeGatewayUrl);
+    this.ws.send(
+      JSON.stringify({
+        op: OpCode.Resume,
+        d: {
+          token: this._token,
+          session_id: this.sessionId,
+          seq: this.seq,
+        },
+      }),
+    );
     this.login(this._token);
   };
 

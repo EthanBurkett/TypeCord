@@ -6,7 +6,7 @@ features will come within due time
 ## Current Features
 
 - Basic bot setup
-- Handling websocket events (message, ready, & guild create). Other events will work, just not typed.
+- Handling websocket events (message, ready, & guild create). All events are now typed (10/3/24)
 
 ## Roadmap
 

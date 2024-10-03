@@ -1,0 +1,16 @@
+/tmp
+/out-tsc
+
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.pnp
+.pnp.js
+
+.vscode/*
+*.xml
+.idea/vcs.xml
+.idea/discord.xml
+.idea/TypeCord.iml
+.env

@@ -51,7 +51,7 @@ export default class Message implements Types.Message {
   }
 
   public async reply(content: string) {
-    await API.Messages.Reply(this, {
+    return await API.Messages.Reply(this, {
       content,
       message_reference: { message_id: this.id },
     });

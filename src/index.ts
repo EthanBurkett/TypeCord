@@ -25,12 +25,11 @@ client.on(Events.Channel.Delete, (channel) => {
 client.on(Events.Message.Create, async (message) => {
   if (message.author.id === client.self?.user.id) return;
 
-  await message.reply(
-    'kys bitch, stop saying dumb shit like "' + message.content + '"',
-  );
-
   if (message.content == "!restart") {
-    client.restart();
+    const msg = await message.reply(`Restarting bot...`);
+    client.restart().then(async (d: any) => {
+      await msg?.reply(d);
+    });
   }
 });
 

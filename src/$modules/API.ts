@@ -1,11 +1,14 @@
 import Message from "$/Message";
 import { Fetch } from "$/Fetch";
-import { Requests } from "#/APITypes";
+import { Requests, Types } from "#/APITypes";
 
 export default {
   Messages: {
-    Reply: async (src: Message, reply: Requests.Message) => {
-      await Fetch({
+    Reply: async (
+      src: Message,
+      reply: Requests.Message,
+    ): Promise<void | Message | undefined> => {
+      return await Fetch<Types.Message>({
         url: `/channels/${src.channel_id}/messages`,
         method: "POST",
         body: {
@@ -18,9 +21,11 @@ export default {
           flags: 1 << 6,
           ...reply,
         },
-      }).catch((e) => {
-        console.log({ e });
-      });
+      })
+        .then((d) => d.data && new Message(d.data))
+        .catch((e) => {
+          console.log({ e });
+        });
     },
   },
 };

@@ -98,26 +98,32 @@ export default class Client extends EventEmitter<ClientEvents> {
     });
   }
 
-  public restart = () => {
-    if (!this.resumeGatewayUrl || !this._token) return;
+  public restart() {
+    return new Promise((resolve, reject) => {
+      if (!this.resumeGatewayUrl || !this._token)
+        reject("No resume gateway url or token found!");
 
-    this.self = undefined;
-    this._identified = false;
+      this.self = undefined;
+      this._identified = false;
 
-    this.ws?.close();
-    this.ws = new ws.WebSocket(this.resumeGatewayUrl);
-    this.ws.send(
-      JSON.stringify({
-        op: OpCode.Resume,
-        d: {
-          token: this._token,
-          session_id: this.sessionId,
-          seq: this.seq,
-        },
-      }),
-    );
-    this.login(this._token);
-  };
+      this.ws?.close();
+      // @ts-ignore
+      this.ws = new ws.WebSocket(this.resumeGatewayUrl);
+      this.ws.send(
+        JSON.stringify({
+          op: OpCode.Resume,
+          d: {
+            token: this._token,
+            session_id: this.sessionId,
+            seq: this.seq,
+          },
+        }),
+      );
+      // @ts-ignore
+      this.login(this._token);
+      resolve("Bot restarted!");
+    });
+  }
 
   //</editor-fold>
 

@@ -43,7 +43,7 @@ export default class Client extends EventEmitter<ClientEvents> {
             op: OpCode.Identify,
             d: {
               token,
-              intents: this.createIntents(this._settings.intents),
+              intents: this.createBitfield(this._settings.intents),
               properties: {
                 $os: "linux",
                 $browser: "typecord",
@@ -128,8 +128,8 @@ export default class Client extends EventEmitter<ClientEvents> {
   //</editor-fold>
 
   //<editor-fold desc="Private Methods">
-  private readonly createIntents = (intents: Array<bigint>): number =>
-    Number(intents.reduce((acc, intent) => acc | intent, 0n));
+  private readonly createBitfield = (bits: Array<bigint>): number =>
+    Number(bits.reduce((acc, bit) => acc | bit, 0n));
 
   private readonly sendHeartbeat = () => {
     this.logger.debug(`Sending heartbeat with sequence number: ${this.seq}`);

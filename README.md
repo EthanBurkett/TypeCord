@@ -1,15 +1,18 @@
 # TypeCord
 
-To install dependencies:
+This is a demonstration of the process on communicating with discord to create bots. This is a side project. More
+features will come within due time
 
-```bash
-bun install
-```
+## Current Features
 
-To run:
+- Basic bot setup
+- Handling websocket events (message, ready, & guild create). Other events will work, just not typed.
 
-```bash
-bun run dist/index.js
-```
+## Roadmap
 
-This project was created using `bun init` in bun v1.1.9. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- Command handling
+- Command parsing
+- Slash commands
+- Interaction handling
+- ALL the API calls. (This is a big one) [Postman Collection](https://www.postman.com/discord-api/discord-api/overview)
+- Handling certain functions like editing messages after being sent, etc. Basic chaining of functions.

@@ -1,10 +1,10 @@
 import Client from "$/Client";
-import { Events } from "#/Client";
+import { Events, Intents } from "#/Client";
 import * as process from "node:process";
 
 const client = new Client({
-  intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"],
-  debug: true,
+  intents: [Intents.Guilds, Intents.GuildMessages, Intents.MessageContent],
+  debug: false,
 });
 
 const logger = client.logger;
@@ -22,7 +22,7 @@ client.on(Events.Channel.Delete, (channel) => {
 });
 
 client.on(Events.Message.Create, (message) => {
-  logger.raw({ message });
+  logger.raw({ author: message.author.username, content: message.content });
 });
 
 client.login(process.env.BOT_TOKEN!);

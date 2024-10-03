@@ -125,10 +125,8 @@ export default class Client extends EventEmitter<ClientEvents> {
   //</editor-fold>
 
   //<editor-fold desc="Private Methods">
-  private readonly createIntents = (
-    intents: Array<keyof typeof Intents>,
-  ): number =>
-    Number(intents.reduce((acc, intent) => acc | Intents[intent], 0n));
+  private readonly createIntents = (intents: Array<bigint>): number =>
+    Number(intents.reduce((acc, intent) => acc | intent, 0n));
 
   private readonly sendHeartbeat = () => {
     this.logger.debug(`Sending heartbeat with sequence number: ${this.seq}`);

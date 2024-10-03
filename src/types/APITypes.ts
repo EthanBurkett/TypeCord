@@ -131,7 +131,7 @@ export namespace Types {
     avatar: null;
   }
 
-  export type Mention = Pick<
+  export type User = Pick<
     Types.APIUser,
     "username" | "global_name" | "id" | "discriminator" | "clan" | "avatar"
   > & {
@@ -145,7 +145,7 @@ export namespace Types {
     timestamp: Date;
     pinned: boolean;
     nonce: string;
-    mentions: Array<Mention>;
+    mentions: Array<User>;
     mention_roles: unknown[]; // TODO: Define the structure for roles
     mention_everyone: boolean;
     member: GuildMember;
@@ -156,7 +156,7 @@ export namespace Types {
     content: string;
     components: unknown[];
     channel_id: string;
-    author: Types.APIUser;
+    author: Types.User;
     attachments: unknown[];
     guild_id: string;
   }

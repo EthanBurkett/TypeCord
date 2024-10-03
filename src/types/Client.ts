@@ -312,6 +312,6 @@ export const Intents = {
 };
 
 export interface ClientSetup {
-  intents: Array<keyof typeof Intents>;
+  intents: Array<bigint>;
   debug?: boolean;
 }

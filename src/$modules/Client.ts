@@ -1,15 +1,10 @@
 import EventEmitter from "$/EventEmitter";
-import {
-  ClientEventMap,
-  ClientEvents,
-  ClientSetup,
-  Events,
-  Intents,
-} from "#/Client";
+import { ClientEventMap, ClientEvents, ClientSetup, Events } from "#/Client";
 import ws from "ws";
 import { GatewayEvents, GatewayPayload, OpCode } from "#/Socket";
 import Logger from "$/Logger";
 import { Types } from "#/APITypes";
+import Message from "$/Message";
 
 export default class Client extends EventEmitter<ClientEvents> {
   public self?: Types.Client;
@@ -93,6 +88,8 @@ export default class Client extends EventEmitter<ClientEvents> {
         this.sessionId = this.self?.session_id;
 
         this.emit(Events.Client.Ready, this.self);
+      } else if (payload.t == GatewayEvents.MessageCreate) {
+        this.emit(Events.Message.Create, new Message(payload.d));
       } else {
         const event = ClientEventMap[payload.t as GatewayEvents];
 

@@ -1,5 +1,6 @@
 import { GatewayEvents, GatewayPayload } from "#/Socket";
 import { Types } from "#/APITypes";
+import Message from "$/Message";
 
 export const ClientEventMap: {
   [key in GatewayEvents]: keyof ClientEvents;
@@ -141,9 +142,9 @@ export type ClientEvents = {
   "interaction:create": unknown;
   "invite:create": unknown;
   "invite:delete": unknown;
-  "message:create": Types.Message;
-  "message:update": Types.Message;
-  "message:delete": Types.Message;
+  "message:create": Message;
+  "message:update": Message;
+  "message:delete": Message;
   "message:deleteBulk": Array<Types.Message>;
   "message:reactionAdd": unknown;
   "message:reactionRemove": unknown;

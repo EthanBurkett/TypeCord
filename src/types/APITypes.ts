@@ -1,3 +1,18 @@
+export namespace Requests {
+  export interface Message {
+    content?: string;
+    embeds?: any[];
+    allowed_mentions?: any;
+    sticker_ids?: any[];
+    components?: any[];
+    flags?: number;
+    attachments?: object[];
+    message_reference?: any;
+    nonce?: number;
+    tts?: boolean;
+  }
+}
+
 export namespace Types {
   export type GeoLocations =
     | "us-south"
@@ -53,7 +68,7 @@ export namespace Types {
     discriminator: string;
     clan: string;
     bot: boolean;
-    avatar: null;
+    avatar: string;
   }
 
   export interface Guild {

@@ -1,16 +1,17 @@
 import Client from "$/Client";
 import { Events, Intents } from "#/Client";
-import * as process from "node:process";
-import Message from "$/Message";
+import Embed from "./$modules/Discord/Embed";
+import { Colors } from "./types/APITypes";
+import { BOT_TOKEN } from "./!config";
 
 const client = new Client({
   intents: [Intents.Guilds, Intents.GuildMessages, Intents.MessageContent],
-  debug: false,
+  debug: true,
 });
 
 const logger = client.logger;
 
-client.once(Events.Client.Ready, (client) => {
+client.on(Events.Client.Ready, (client) => {
   logger.info(`${client?.user.username} is now online!`);
 });
 
@@ -26,11 +27,28 @@ client.on(Events.Message.Create, async (message) => {
   if (message.author.id === client.self?.user.id) return;
 
   if (message.content == "!restart") {
-    const msg = await message.reply(`Restarting bot...`);
+    const msg = await message.reply({
+      embeds: [
+        new Embed({
+          title: "Restarting Bot...",
+          description: "The bot is restarting...",
+          color: Colors.Red,
+        }),
+      ],
+    });
+
     client.restart().then(async (d: any) => {
-      await msg?.reply(d);
+      await msg?.edit({
+        embeds: [
+          new Embed({
+            title: "Bot Restarted!",
+            description: "The bot has been restarted!",
+            color: Colors.Random(),
+          }),
+        ],
+      });
     });
   }
 });
 
-client.login(process.env.BOT_TOKEN!);
+client.login(BOT_TOKEN);

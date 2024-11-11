@@ -14,3 +14,7 @@ yarn-error.log*
 .idea/discord.xml
 .idea/TypeCord.iml
 .env
+
+/**/!*
+
+dist

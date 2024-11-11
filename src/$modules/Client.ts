@@ -4,7 +4,8 @@ import ws from "ws";
 import { GatewayEvents, GatewayPayload, OpCode } from "#/Socket";
 import Logger from "$/Logger";
 import { Types } from "#/APITypes";
-import Message from "$/Message";
+import Message from "$/Discord/Message";
+import Guilds from "./Discord/Guilds";
 
 export default class Client extends EventEmitter<ClientEvents> {
   public self?: Types.Client;
@@ -23,6 +24,8 @@ export default class Client extends EventEmitter<ClientEvents> {
   private heartbeatInterval?: number = undefined;
   private static gateway = "wss://gateway.discord.gg/?v=10&encoding=json";
 
+  public guilds = new Guilds(this);
+
   constructor(clientSetup: ClientSetup) {
     super();
     this.logger = new Logger(clientSetup);
@@ -32,7 +35,7 @@ export default class Client extends EventEmitter<ClientEvents> {
   //<editor-fold desc="Public Methods">
   login(token: string) {
     this._token = token;
-    if (!this.ws) this.ws = new ws.WebSocket(Client.gateway);
+    if (!this.ws) this.ws = new ws(Client.gateway);
 
     if (this.self) return console.log(`Bot is already online!`);
 
@@ -50,20 +53,20 @@ export default class Client extends EventEmitter<ClientEvents> {
                 $device: "typecord",
               },
             },
-          }),
+          })
         );
         this._identified = true;
       }
     });
 
     this.ws.on("close", () => {
-      console.log("Connection closed!");
+      this.logger.warn("Connection closed!");
     });
 
     this.ws.on("message", (data) => {
       const payload = JSON.parse(data.toString()) as GatewayPayload;
 
-      this.seq = payload?.d?.seq || (payload as any)?.s || this.seq || null;
+      this.seq = (payload as any)?.s || payload?.d?.seq || this.seq || null;
       this.heartbeatInterval = this.heartbeatInterval
         ? this.heartbeatInterval
         : payload?.d?.heartbeat_interval || null;
@@ -80,6 +83,7 @@ export default class Client extends EventEmitter<ClientEvents> {
 
       if (payload.op === OpCode.HeartbeatAck) return;
 
+      this.logger.debug(`Received event: ${payload.t}`);
       if (payload.t == GatewayEvents.Ready) {
         this.self = payload.d;
 
@@ -87,9 +91,9 @@ export default class Client extends EventEmitter<ClientEvents> {
         this.sessionType = this.self?.session_type;
         this.sessionId = this.self?.session_id;
 
-        this.emit(Events.Client.Ready, this.self);
+        this.emit(Events.Client.Ready, this.self!);
       } else if (payload.t == GatewayEvents.MessageCreate) {
-        this.emit(Events.Message.Create, new Message(payload.d));
+        this.emit(Events.Message.Create, new Message(payload.d, this));
       } else {
         const event = ClientEventMap[payload.t as GatewayEvents];
 
@@ -108,7 +112,7 @@ export default class Client extends EventEmitter<ClientEvents> {
 
       this.ws?.close();
       // @ts-ignore
-      this.ws = new ws.WebSocket(this.resumeGatewayUrl);
+      this.ws = new ws(this.resumeGatewayUrl);
       this.ws.send(
         JSON.stringify({
           op: OpCode.Resume,
@@ -117,7 +121,7 @@ export default class Client extends EventEmitter<ClientEvents> {
             session_id: this.sessionId,
             seq: this.seq,
           },
-        }),
+        })
       );
       // @ts-ignore
       this.login(this._token);

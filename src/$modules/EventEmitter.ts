@@ -1,47 +1,40 @@
-type EventsMap = {
-  [event: string]: any; // Define the structure for your events here
-};
+type Listener<T extends Array<unknown>> = (...args: T) => void;
 
-export default class EventEmitter<T extends EventsMap> {
-  private listeners: {
-    [K in keyof T]?: Array<(payload: T[K]) => void>;
+export default class EventEmitter<
+  EventMap extends Record<string, Array<unknown>>
+> {
+  private eventListeners: {
+    [K in keyof EventMap]?: Set<Listener<EventMap[K]>>;
   } = {};
 
-  public on<K extends keyof T>(
+  public on<K extends keyof EventMap>(
     event: K,
-    listener: (payload: T[K]) => void,
-  ): void {
-    if (!this.listeners[event]) {
-      this.listeners[event] = [];
-    }
-    this.listeners[event]!.push(listener);
+    listener: Listener<EventMap[K]>
+  ) {
+    if (!this.eventListeners[event]) this.eventListeners[event] = new Set();
+    this.eventListeners[event].add(listener);
   }
 
-  public once<K extends keyof T>(
+  public emit<K extends keyof EventMap>(event: K, ...args: EventMap[K]) {
+    const listeners = this.eventListeners[event] ?? new Set();
+    for (const listener of listeners) listener(...args);
+  }
+
+  public off<K extends keyof EventMap>(
     event: K,
-    listener: (payload: T[K]) => void,
-  ): void {
-    const onceListener = (payload: T[K]) => {
-      listener(payload);
-      this.off(event, onceListener);
+    listener: Listener<EventMap[K]>
+  ) {
+    this.eventListeners[event]?.delete(listener);
+  }
+
+  public once<K extends keyof EventMap>(
+    event: K,
+    listener: Listener<EventMap[K]>
+  ) {
+    const wrapper = (...args: EventMap[K]) => {
+      listener(...args);
+      this.off(event, wrapper);
     };
-    this.on(event, onceListener);
-  }
-
-  public off<K extends keyof T>(
-    event: K,
-    listener: (payload: T[K]) => void,
-  ): void {
-    if (!this.listeners[event]) return;
-
-    this.listeners[event] = this.listeners[event]!.filter(
-      (l) => l !== listener,
-    );
-  }
-
-  public emit<K extends keyof T>(event: K, payload: T[K]): void {
-    if (!this.listeners[event]) return;
-
-    this.listeners[event]!.forEach((listener) => listener(payload));
+    this.on(event, wrapper);
   }
 }

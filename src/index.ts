@@ -7,10 +7,12 @@ import { BOT_TOKEN } from "./!config";
 const client = new Client({
   intents: [Intents.Guilds, Intents.GuildMessages, Intents.MessageContent],
   debug: true,
+  debug: true,
 });
 
 const logger = client.logger;
 
+client.on(Events.Client.Ready, (client) => {
 client.on(Events.Client.Ready, (client) => {
   logger.info(`${client?.user.username} is now online!`);
 });
@@ -25,6 +27,9 @@ client.on(Events.Channel.Delete, (channel) => {
 
 client.on(Events.Message.Create, async (message) => {
   if (message.author.id === client.self?.user.id) return;
+  await client.guilds
+    .fetch(message.guild_id)
+    .then((g) => console.log(`${g?.name}`));
 
   if (message.content == "!restart") {
     const msg = await message.reply({

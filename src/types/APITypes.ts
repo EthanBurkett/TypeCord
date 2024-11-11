@@ -17,7 +17,39 @@ export namespace Requests {
   }
 }
 
-// export type ColorResolvable = | keyof typeof Colors | 'Random' | readonly [red: number, green: number, blue: number] | number | HexColorString;
+export const Colors = {
+  Default: 0x000000,
+  White: 0xffffff,
+  Aqua: 0x1abc9c,
+  Green: 0x57f287,
+  Blue: 0x3498db,
+  Yellow: 0xfee75c,
+  Purple: 0x9b59b6,
+  LuminousVividPink: 0xe91e63,
+  Fuchsia: 0xeb459e,
+  Gold: 0xf1c40f,
+  Orange: 0xe67e22,
+  Red: 0xed4245,
+  Grey: 0x95a5a6,
+  Navy: 0x34495e,
+  DarkAqua: 0x11806a,
+  DarkGreen: 0x1f8b4c,
+  DarkBlue: 0x206694,
+  DarkPurple: 0x71368a,
+  DarkVividPink: 0xad1457,
+  DarkGold: 0xc27c0e,
+  DarkOrange: 0xa84300,
+  DarkRed: 0x992d22,
+  DarkGrey: 0x979c9f,
+  DarkerGrey: 0x7f8c8d,
+  LightGrey: 0xbcc0c0,
+  DarkNavy: 0x2c3e50,
+  Blurple: 0x5865f2,
+  Greyple: 0x99aab5,
+  DarkButNotBlack: 0x2c2f33,
+  NotQuiteBlack: 0x23272a,
+  Random: () => Math.floor(Math.random() * 0xffffff),
+};
 export namespace Types {
   export type GeoLocations =
     | "us-south"
@@ -25,42 +57,6 @@ export namespace Types {
     | "us-central"
     | "us-west"
     | "us-east";
-
-  export namespace Colors {
-    export namespace Default {
-      export const Default = 0x000000;
-      export const White = 0xffffff;
-      export const Aqua = 0x1abc9c;
-      export const Green = 0x57f287;
-      export const Blue = 0x3498db;
-      export const Yellow = 0xfee75c;
-      export const Purple = 0x9b59b6;
-      export const LuminousVividPink = 0xe91e63;
-      export const Fuchsia = 0xeb459e;
-      export const Gold = 0xf1c40f;
-      export const Orange = 0xe67e22;
-      export const Red = 0xed4245;
-      export const Grey = 0x95a5a6;
-      export const Navy = 0x34495e;
-      export const DarkAqua = 0x11806a;
-      export const DarkGreen = 0x1f8b4c;
-      export const DarkBlue = 0x206694;
-      export const DarkPurple = 0x71368a;
-      export const DarkVividPink = 0xad1457;
-      export const DarkGold = 0xc27c0e;
-      export const DarkOrange = 0xa84300;
-      export const DarkRed = 0x992d22;
-      export const DarkGrey = 0x979c9f;
-      export const DarkerGrey = 0x7f8c8d;
-      export const LightGrey = 0xbcc0c0;
-      export const DarkNavy = 0x2c3e50;
-      export const Blurple = 0x5865f2;
-      export const Greyple = 0x99aab5;
-      export const DarkButNotBlack = 0x2c2f33;
-      export const NotQuiteBlack = 0x23272a;
-      export const Random = () => Math.floor(Math.random() * 0xffffff);
-    }
-  }
 
   export type HexColorString = `#${string}`;
   export type Colors =

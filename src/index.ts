@@ -3,6 +3,7 @@ import { Events, Intents } from "#/Client";
 import * as process from "node:process";
 import Message from "$/Discord/Message";
 import Embed from "./$modules/Discord/Embed";
+import { Colors } from "./types/APITypes";
 
 const client = new Client({
   intents: [Intents.Guilds, Intents.GuildMessages, Intents.MessageContent],
@@ -46,7 +47,7 @@ client.on(Events.Message.Create, async (message) => {
           new Embed({
             title: "Bot Restarted!",
             description: "The bot has been restarted!",
-            color: 0xff00ff,
+            color: Colors.Fuchsia,
           }),
         ],
       });

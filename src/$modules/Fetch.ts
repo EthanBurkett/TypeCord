@@ -16,7 +16,7 @@ export const Fetch = async <T>({
   auth = true,
 }: {
   url: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers?: { [key: string]: string };
   body?: Record<string, any>;
   auth?: boolean;
@@ -34,6 +34,7 @@ export const Fetch = async <T>({
       const data = await d.json();
       if (data.error) throw new Error(data.error);
       if (data.errors) throw new Error(data.errors);
+      if (data.code && data.message) throw new Error(data.message);
       return {
         data,
       };

@@ -1,7 +1,11 @@
+import { DeepPartial } from "#/Utilities";
+import Embed from "$/Discord/Embed";
+import Guilds from "$/Discord/Guilds";
+
 export namespace Requests {
   export interface Message {
     content?: string;
-    embeds?: any[];
+    embeds?: Array<Types.EmbedData> | Array<Embed>;
     allowed_mentions?: any;
     sticker_ids?: any[];
     components?: any[];
@@ -13,6 +17,7 @@ export namespace Requests {
   }
 }
 
+// export type ColorResolvable = | keyof typeof Colors | 'Random' | readonly [red: number, green: number, blue: number] | number | HexColorString;
 export namespace Types {
   export type GeoLocations =
     | "us-south"
@@ -20,6 +25,92 @@ export namespace Types {
     | "us-central"
     | "us-west"
     | "us-east";
+
+  export namespace Colors {
+    export namespace Default {
+      export const Default = 0x000000;
+      export const White = 0xffffff;
+      export const Aqua = 0x1abc9c;
+      export const Green = 0x57f287;
+      export const Blue = 0x3498db;
+      export const Yellow = 0xfee75c;
+      export const Purple = 0x9b59b6;
+      export const LuminousVividPink = 0xe91e63;
+      export const Fuchsia = 0xeb459e;
+      export const Gold = 0xf1c40f;
+      export const Orange = 0xe67e22;
+      export const Red = 0xed4245;
+      export const Grey = 0x95a5a6;
+      export const Navy = 0x34495e;
+      export const DarkAqua = 0x11806a;
+      export const DarkGreen = 0x1f8b4c;
+      export const DarkBlue = 0x206694;
+      export const DarkPurple = 0x71368a;
+      export const DarkVividPink = 0xad1457;
+      export const DarkGold = 0xc27c0e;
+      export const DarkOrange = 0xa84300;
+      export const DarkRed = 0x992d22;
+      export const DarkGrey = 0x979c9f;
+      export const DarkerGrey = 0x7f8c8d;
+      export const LightGrey = 0xbcc0c0;
+      export const DarkNavy = 0x2c3e50;
+      export const Blurple = 0x5865f2;
+      export const Greyple = 0x99aab5;
+      export const DarkButNotBlack = 0x2c2f33;
+      export const NotQuiteBlack = 0x23272a;
+      export const Random = () => Math.floor(Math.random() * 0xffffff);
+    }
+  }
+
+  export type HexColorString = `#${string}`;
+  export type Colors =
+    | keyof typeof Colors
+    | "Random"
+    | readonly [red: number, green: number, blue: number]
+    | number
+    | HexColorString;
+
+  export namespace Embed {
+    export interface Footer {
+      text: string;
+      icon_url: string;
+      proxy_icon_url: string;
+    }
+    export interface Image {
+      url: string;
+      proxy_url: string;
+      height: number;
+      width: number;
+    }
+    export interface Thumbnail {
+      url: string;
+      proxy_url: string;
+      height: number;
+      width: number;
+    }
+    export interface Video {
+      url: string;
+      height: number;
+      width: number;
+    }
+    export interface Provider {
+      name: string;
+      url: string;
+    }
+  }
+  export type EmbedData = DeepPartial<{
+    title: string;
+    type: string;
+    description: string;
+    url: string;
+    timestamp: Date;
+    color: Colors;
+    footer: Embed.Footer;
+    image: Embed.Image;
+    thumbnail: Embed.Thumbnail;
+    video: Embed.Video;
+    provider: Embed.Provider;
+  }>;
 
   export interface Client {
     v: number;
@@ -31,7 +122,7 @@ export namespace Types {
     relationships: unknown[];
     private_channels: unknown[];
     presences: unknown[];
-    guilds: Array<Types.Guild>;
+    guilds: Guilds;
     guild_join_requests: unknown[];
     geo_ordered_rtc_regions: Array<Types.GeoLocations>;
     auth: {};
@@ -72,64 +163,128 @@ export namespace Types {
   }
 
   export interface Guild {
-    members: Array<Types.APIUser> | undefined;
-    default_message_notifications: number | undefined;
-    nsfw_level: number | undefined;
-    features: string[] | undefined; // TODO: Define the structure for features
-    inventory_settings: unknown | undefined;
-    rules_channel_id: string | undefined;
-    safety_alerts_channel_id: string | undefined;
-    verification_level: number | undefined;
-    application_command_counts: unknown[] | undefined; // TODO: Define the structure for application_command_counts
-    soundboard_sounds: unknown[] | undefined; // TODO: Define the structure for soundboard_sounds
-    id: string | undefined;
-    stickers: unknown[] | undefined; // TODO: Define the structure for stickers
-    afk_timeout: number | undefined;
-    joined_at: Date | undefined;
-    channels: unknown[] | undefined; // TODO: Define the structure for channels
-    voice_states: unknown[] | undefined; // TODO: Define the structure for voice_states
-    activity_instances: unknown[] | undefined; // TODO: Define the structure for activity_instances
-    name: string | undefined;
-    public_updates_channel_id: string | undefined;
-    region: string | undefined;
-    splash: string | undefined;
-    max_members: number | undefined;
-    owner_id: string | undefined;
-    system_channel_flags: number | undefined;
-    threads: unknown[] | undefined; // TODO: Define the structure for threads
-    premium_tier: number | undefined;
-    system_channel_id: string | undefined;
-    guild_scheduled_events: unknown[] | undefined; // TODO: Define the structure for guild_scheduled_events
-    large: boolean | undefined;
-    preferred_locale: string | undefined; // TODO: Define locales
-    description: string | undefined;
-    stage_instances: unknown[] | undefined; // TODO: Define the structure for stage_instances
-    icon: string | undefined;
-    premium_subscription_count: number | undefined;
-    lazy: boolean | undefined;
-    max_stage_video_channel_users: number | undefined;
-    explicit_content_filter: number | undefined;
-    banner: string | undefined;
-    home_header: string | undefined;
-    unavailable: boolean | undefined;
-    mfa_level: number | undefined;
-    emojis: unknown[] | undefined; // TODO: Define the structure for emojis
-    clan: string | undefined;
-    incidents_data: null | undefined;
-    application_id: string | undefined;
-    premium_progress_bar_enabled: boolean | undefined;
-    hub_type: null | undefined;
-    presences: unknown[] | undefined; // TODO: Define the structure for presences
-    nsfw: boolean | undefined;
-    discovery_splash: string | undefined;
-    member_count: number | undefined;
-    version: number | undefined;
-    afk_channel_id: string | undefined;
-    embedded_activities: unknown[] | undefined; // TODO: Define the structure for embedded_activities
-    latest_onboarding_question_id: string | undefined;
-    roles: unknown[] | undefined; // TODO: Define the structure for roles
-    max_video_channel_users: number | undefined;
-    vanity_url_code: string | undefined;
+    members: Array<Types.APIUser> | null;
+    default_message_notifications: number | null;
+    nsfw_level: number | null;
+    features: string[] | null; // TODO: Define the structure for features
+    inventory_settings: unknown | null;
+    rules_channel_id: string | null;
+    safety_alerts_channel_id: string | null;
+    verification_level: number | null;
+    application_command_counts: unknown[] | null; // TODO: Define the structure for application_command_counts
+    soundboard_sounds: unknown[] | null; // TODO: Define the structure for soundboard_sounds
+    id: string | null;
+    stickers: unknown[] | null; // TODO: Define the structure for stickers
+    afk_timeout: number | null;
+    joined_at: Date | null;
+    channels: unknown[] | null; // TODO: Define the structure for channels
+    voice_states: unknown[] | null; // TODO: Define the structure for voice_states
+    activity_instances: unknown[] | null; // TODO: Define the structure for activity_instances
+    name: string | null;
+    public_updates_channel_id: string | null;
+    region: string | null;
+    splash: string | null;
+    max_members: number | null;
+    owner_id: string | null;
+    system_channel_flags: number | null;
+    threads: unknown[] | null; // TODO: Define the structure for threads
+    premium_tier: number | null;
+    system_channel_id: string | null;
+    guild_scheduled_events: unknown[] | null; // TODO: Define the structure for guild_scheduled_events
+    large: boolean | null;
+    preferred_locale: string | null; // TODO: Define locales
+    description: string | null;
+    stage_instances: unknown[] | null; // TODO: Define the structure for stage_instances
+    icon: string | null;
+    premium_subscription_count: number | null;
+    lazy: boolean | null;
+    max_stage_video_channel_users: number | null;
+    explicit_content_filter: number | null;
+    banner: string | null;
+    home_header: string | null;
+    unavailable: boolean | null;
+    mfa_level: number | null;
+    emojis: unknown[] | null; // TODO: Define the structure for emojis
+    clan: string | null;
+    incidents_data: null | null;
+    application_id: string | null;
+    premium_progress_bar_enabled: boolean | null;
+    hub_type: null | null;
+    presences: unknown[] | null; // TODO: Define the structure for presences
+    nsfw: boolean | null;
+    discovery_splash: string | null;
+    member_count: number | null;
+    version: number | null;
+    afk_channel_id: string | null;
+    embedded_activities: unknown[] | null; // TODO: Define the structure for embedded_activities
+    latest_onboarding_question_id: string | null;
+    roles: unknown[] | null; // TODO: Define the structure for roles
+    max_video_channel_users: number | null;
+    vanity_url_code: string | null;
+  }
+
+  export interface APIGuild {
+    id: string;
+    name: string;
+    icon: string | null;
+    description: string | null;
+    home_header: string | null;
+    splash: string | null;
+    discovery_splash: string | null;
+    features: Array<string>;
+    banner: string | null;
+    owner_id: string;
+    application_id: string | null;
+    region: string;
+    afk_channel_id: string | null;
+    afk_timeout: number;
+    system_channel_id: string;
+    system_channel_flags: number;
+    widget_enabled: boolean;
+    widget_channel_id: string | null;
+    verification_level: number;
+    roles: Array<Types.GuildRole>;
+    default_message_notifications: number;
+    mfa_level: number;
+    explicit_content_filter: number;
+    max_presences: number | null;
+    max_members: number;
+    max_stage_video_channel_users: number;
+    max_video_channel_users: number;
+    vanity_url_code: string | null;
+    premium_tier: number;
+    premium_subscription_count: number;
+    preferred_locale: string;
+    rules_channel_id: string | null;
+    hub_type: string | null;
+    premium_progress_bar_enabled: boolean;
+    latest_onboarding_question_id: string | null;
+    nsfw: boolean;
+    nsfw_level: number;
+    hoist: boolean;
+    stickers: unknown[]; // TODO: Define the structure for stickers
+    safety_alerts_channel_id: null;
+    public_updates_channel_id: null;
+    emojis: unknown[]; // TODO: Define the structure for emojis
+    incidents_data: null;
+    inventory_settings: null;
+    embed_enabled: boolean;
+    embed_channel_id: string | null;
+  }
+
+  export interface GuildRole {
+    id: string;
+    name: string;
+    description: string | null;
+    permissions: string;
+    position: number;
+    color: number;
+    hoist: boolean;
+    managed: boolean;
+    mentionable: boolean;
+    icon: string | null;
+    unicode_emoji: string | null;
+    flags: number;
   }
 
   export interface GuildMember {
@@ -174,5 +329,22 @@ export namespace Types {
     author: Types.User;
     attachments: unknown[];
     guild_id: string;
+  }
+
+  export interface Reaction {
+    emoji: {
+      id: string;
+      name: string;
+    };
+    count: number;
+    count_details: {
+      burst: number;
+      normal: number;
+    };
+    burst_colors: Array<unknown>;
+    me_burst: boolean;
+    burst_me: boolean;
+    me: boolean;
+    burst_count: number;
   }
 }
